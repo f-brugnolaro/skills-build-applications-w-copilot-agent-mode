@@ -1,4 +1,5 @@
 import ResourceView from './ResourceView.jsx'
+import { withApiFallback } from './api.js'
 
 function highestScore(items) {
   return items.reduce(
@@ -8,8 +9,14 @@ function highestScore(items) {
 }
 
 export default function Leaderboard() {
+  const endpoint = withApiFallback(
+    `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/leaderboard/`,
+    'leaderboard',
+  )
+
   return (
     <ResourceView
+      endpoint={endpoint}
       resource="leaderboard"
       title="Leaderboard"
       description="Review standings sorted by rank and team contribution."

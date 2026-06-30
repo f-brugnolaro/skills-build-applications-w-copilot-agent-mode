@@ -1,4 +1,5 @@
 import ResourceView from './ResourceView.jsx'
+import { withApiFallback } from './api.js'
 
 function totalExercises(items) {
   return items.reduce(
@@ -16,8 +17,14 @@ function renderExercises(item) {
 }
 
 export default function Workouts() {
+  const endpoint = withApiFallback(
+    `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/workouts/`,
+    'workouts',
+  )
+
   return (
     <ResourceView
+      endpoint={endpoint}
       resource="workouts"
       title="Workouts"
       description="Browse suggested plans organized by focus area and effort level."

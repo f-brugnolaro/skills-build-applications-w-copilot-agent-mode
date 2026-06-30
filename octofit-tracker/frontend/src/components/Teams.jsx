@@ -1,12 +1,19 @@
 import ResourceView from './ResourceView.jsx'
+import { withApiFallback } from './api.js'
 
 function totalWeeklyPoints(items) {
   return items.reduce((total, item) => total + (item.weeklyPoints ?? 0), 0)
 }
 
 export default function Teams() {
+  const endpoint = withApiFallback(
+    `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/teams/`,
+    'teams',
+  )
+
   return (
     <ResourceView
+      endpoint={endpoint}
       resource="teams"
       title="Teams"
       description="Compare city squads, mottos, roster size, and weekly momentum."

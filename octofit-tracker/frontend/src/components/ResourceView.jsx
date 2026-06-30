@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { buildApiUrl, fetchCollection, getApiBaseUrl } from './api.js'
+import { fetchCollection, getApiBaseUrl } from './api.js'
 
 function formatValue(value, fallback = 'n/a') {
   if (value === null || value === undefined || value === '') {
@@ -15,6 +15,7 @@ function formatValue(value, fallback = 'n/a') {
 
 export default function ResourceView({
   resource,
+  endpoint,
   title,
   description,
   columns,
@@ -33,7 +34,7 @@ export default function ResourceView({
 
     async function load() {
       try {
-        const result = await fetchCollection(resource)
+        const result = await fetchCollection(resource, endpoint)
 
         if (!cancelled) {
           setState({
@@ -62,7 +63,7 @@ export default function ResourceView({
     return () => {
       cancelled = true
     }
-  }, [resource])
+  }, [endpoint, resource])
 
   const cards = metrics.map((metric) => ({
     label: metric.label,
@@ -70,7 +71,7 @@ export default function ResourceView({
   }))
 
   const codespaceConfigured = Boolean(import.meta.env.VITE_CODESPACE_NAME?.trim())
-  const apiUrl = buildApiUrl(resource)
+  const apiUrl = endpoint
 
   return (
     <section className="resource-stack">

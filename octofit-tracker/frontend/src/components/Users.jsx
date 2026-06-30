@@ -1,12 +1,19 @@
 import ResourceView from './ResourceView.jsx'
+import { withApiFallback } from './api.js'
 
 function uniqueTeams(items) {
   return new Set(items.map((item) => item.team).filter(Boolean)).size
 }
 
 export default function Users() {
+  const endpoint = withApiFallback(
+    `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/users/`,
+    'users',
+  )
+
   return (
     <ResourceView
+      endpoint={endpoint}
       resource="users"
       title="Users"
       description="View athlete profiles, roles, and the goals driving each plan."

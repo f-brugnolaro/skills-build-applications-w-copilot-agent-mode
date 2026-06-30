@@ -1,4 +1,5 @@
 import ResourceView from './ResourceView.jsx'
+import { withApiFallback } from './api.js'
 
 function sumDuration(items) {
   return items.reduce((total, item) => total + (item.durationMinutes ?? 0), 0)
@@ -13,8 +14,14 @@ function formatDate(value) {
 }
 
 export default function Activities() {
+  const endpoint = withApiFallback(
+    `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/activities/`,
+    'activities',
+  )
+
   return (
     <ResourceView
+      endpoint={endpoint}
       resource="activities"
       title="Activities"
       description="Track recent sessions across the athlete roster."

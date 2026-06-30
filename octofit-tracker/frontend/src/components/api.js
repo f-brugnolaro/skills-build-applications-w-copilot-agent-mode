@@ -22,6 +22,20 @@ export function buildApiUrl(resource) {
   return `${getApiBaseUrl()}/${trimmedResource}/`
 }
 
+export function withApiFallback(preferredUrl, resource) {
+  const unresolvedMarker = 'https://undefined-8000.app.github.dev'
+
+  if (
+    !preferredUrl ||
+    preferredUrl.includes(unresolvedMarker) ||
+    preferredUrl.includes('https://-8000.app.github.dev')
+  ) {
+    return buildApiUrl(resource)
+  }
+
+  return preferredUrl
+}
+
 export function normalizeCollection(payload, resourceName) {
   if (Array.isArray(payload)) {
     return { items: payload, total: payload.length, source: 'array' }
@@ -55,8 +69,8 @@ export function normalizeCollection(payload, resourceName) {
   }
 }
 
-export async function fetchCollection(resourceName) {
-  const response = await fetch(buildApiUrl(resourceName))
+export async function fetchCollection(resourceName, endpoint = buildApiUrl(resourceName)) {
+  const response = await fetch(endpoint)
 
   if (!response.ok) {
     throw new Error(`Request failed with status ${response.status}`)
