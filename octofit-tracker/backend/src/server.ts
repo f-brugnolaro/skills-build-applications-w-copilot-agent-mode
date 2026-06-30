@@ -1,8 +1,8 @@
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
-import mongoose from 'mongoose';
 
+import { connectToDatabase } from './config/database';
 import activitiesRoutes from './routes/activities';
 import healthRoutes from './routes/health';
 import leaderboardRoutes from './routes/leaderboard';
@@ -14,7 +14,6 @@ dotenv.config();
 
 const app = express();
 const PORT = Number(process.env.PORT) || 8000;
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/octofit_db';
 
 app.use(cors());
 app.use(express.json());
@@ -41,9 +40,7 @@ app.get('/', (_req, res) => {
 
 async function startServer(): Promise<void> {
   try {
-    await mongoose.connect(MONGODB_URI, {
-      dbName: 'octofit_db',
-    });
+    await connectToDatabase();
 
     app.listen(PORT, () => {
       console.log(`OctoFit backend listening on port ${PORT}`);
