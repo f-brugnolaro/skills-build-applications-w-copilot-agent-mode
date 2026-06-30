@@ -7,7 +7,12 @@ const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const activities_1 = __importDefault(require("./routes/activities"));
 const health_1 = __importDefault(require("./routes/health"));
+const leaderboard_1 = __importDefault(require("./routes/leaderboard"));
+const teams_1 = __importDefault(require("./routes/teams"));
+const users_1 = __importDefault(require("./routes/users"));
+const workouts_1 = __importDefault(require("./routes/workouts"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const PORT = Number(process.env.PORT) || 8000;
@@ -15,6 +20,11 @@ const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/octofi
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 app.use('/api', health_1.default);
+app.use('/api/users', users_1.default);
+app.use('/api/teams', teams_1.default);
+app.use('/api/activities', activities_1.default);
+app.use('/api/leaderboard', leaderboard_1.default);
+app.use('/api/workouts', workouts_1.default);
 app.get('/', (_req, res) => {
     const codespaceName = process.env.CODESPACE_NAME;
     const baseUrl = codespaceName

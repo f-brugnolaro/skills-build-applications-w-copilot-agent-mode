@@ -3,7 +3,12 @@ import dotenv from 'dotenv';
 import express from 'express';
 import mongoose from 'mongoose';
 
+import activitiesRoutes from './routes/activities';
 import healthRoutes from './routes/health';
+import leaderboardRoutes from './routes/leaderboard';
+import teamsRoutes from './routes/teams';
+import usersRoutes from './routes/users';
+import workoutsRoutes from './routes/workouts';
 
 dotenv.config();
 
@@ -15,6 +20,11 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api', healthRoutes);
+app.use('/api/users', usersRoutes);
+app.use('/api/teams', teamsRoutes);
+app.use('/api/activities', activitiesRoutes);
+app.use('/api/leaderboard', leaderboardRoutes);
+app.use('/api/workouts', workoutsRoutes);
 
 app.get('/', (_req, res) => {
   const codespaceName = process.env.CODESPACE_NAME;
